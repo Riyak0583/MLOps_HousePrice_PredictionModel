@@ -1,9 +1,16 @@
 # Central configuration: edit this instead of touching code.
 data:
+<<<<<<< HEAD
   path: "C:\MLOPs_HousePrice_PredictionModel\data\raw\house_price_prediction_dataset.csv"       # CSV used for training
   target: price               # name of the label column
   test_size: 0.3
   random_state: 1
+=======
+  path: data/dataset.csv        # CSV used for training
+  target: target                # name of the label column
+  test_size: 0.2
+  random_state: 42
+>>>>>>> 4f65af295c0f1bce00d97b8425efd07e0a9b09a6
 
 model:
   type: random_forest           # random_forest | logistic_regression
