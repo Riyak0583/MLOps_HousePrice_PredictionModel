@@ -9,7 +9,8 @@ def data_ingestion():
                             Heating_Type,Distance_To_City_Center_Miles,School_Rating,
                             HOA_Fee_Monthly,Annual_Property_Tax,
     * Dependent Column[y]   : Price
-
+    * Model :  Regression
+    * r2score : 95%
     '''
 
     df = pd.read_csv(r"C:\MLOPs_HousePrice_PredictionModel\data\raw\house_price_prediction_dataset.csv")

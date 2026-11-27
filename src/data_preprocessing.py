@@ -7,7 +7,7 @@ from imblearn.over_sampling import SMOTE
 
 
 
-def data_preprocessing():
+def data_preprocessing(df):
 
     '''
     * step1 : Drop the duplicate values present in the dataset.
@@ -34,54 +34,65 @@ def data_preprocessing():
 
 
     # Step1 : Drop the duplicate values.
-    df=df.drop_duplicates(inplace = True)
+
+    df = df.drop_duplicates()
 
 
     # Step2 : Feature Engineering(Optional).
 
 
     # Step3 : Split the dataset into X and y.
-    X = df.drop(columns=['price'])    # Independent columns
-    y = df['price']                   # Dependent column
+
+    X = df.drop(columns=['Price','Property_ID','Date_Sold'])    # Independent columns
+    y = df['Price']                                             # Dependent column
 
 
     
     # Step4 : Split the dataset into train(Seen) and test(Test) dataset.
+
     X_train,X_test,y_train,y_test = train_test_split(X,y,
                                                      test_size = 0.3,
-                                                     random_size = 1)
+                                                     random_state = 1)
 
 
 
     #Step5 : Segregate the pipeline into numerical and categorical.
+
     numerical_col = X_train.select_dtypes(exclude="object").columns
     categorical_col = X_train.select_dtypes(include="object").columns
 
 
 
     # Step5 : Use numerical_pipeline.
+
     numerical_pipeline = Pipeline([('Imputation',SimpleImputer(strategy = 'median')),
-                                   ('Scaling',MinMaxScaler)])
+                                   ('Scaling',MinMaxScaler())])
 
 
 
     # Step7 : Use categorical_pipeline.
+
     categorical_pipeline = Pipeline([('Imputation',SimpleImputer(strategy = 'most_frequent')),
                                      ('Encoding',OneHotEncoder(handle_unknown = 'ignore'))])
     
 
 
     #Step8 : Use columntransformer to concat numerical_pipeline and categorical_pipeline
-    transformer = ColumnTransformer([('numerical_pipeline',numerical_pipeline,numerical_col),
-                                      ('categorical_pipeline',categorical_pipeline,categorical_col)])
+
+    transformer = ColumnTransformer([
+        ('numerical_pipeline',numerical_pipeline,numerical_col),
+        ('categorical_pipeline',categorical_pipeline,categorical_col)
+        ])
 
     
 
     #Step9 : Fit the transformer on seen and unseen dataset.
+
     X_train = transformer.fit_transform(X_train)   #Seen dataset
     X_test = transformer.transform(X_test)         #Unseen dataset
 
 
 
     #Step10 : Return the preprocess data value
+
     return X_train, X_test, y_train, y_test
